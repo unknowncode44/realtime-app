@@ -35,7 +35,7 @@ export class LoginComponent {
         },
         complete: () => {
           this.loading = false
-          this.router.navigate(['public/register'])
+          this.router.navigate(['private/dashboard'])
         }
         
       })

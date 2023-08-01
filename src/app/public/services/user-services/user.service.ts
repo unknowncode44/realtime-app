@@ -8,10 +8,14 @@ import { UserI, LoginResponseI } from '../../public-interfaces';
 //? Angular Material Imports
 // MatSnackBar es un componente que muestra un popup del tipo toast, muy util para notificar de acciones al usuario.
 import { MatSnackBar, MatSnackBarConfig  } from '@angular/material/snack-bar'
+import { LOCALSTORAGE_KEY_NESTJS_TODO_APP } from 'src/app/app.module';
+
+// importamos el Helper de JWT para las operaciones que correspondan 
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 // definimos la configuracion del snackbar (toast)
 const snackBarConfig: MatSnackBarConfig = {
-  duration          : 1000,
+  duration          : 5000,
   verticalPosition  : 'top',
   horizontalPosition: 'right'
 }
@@ -23,7 +27,8 @@ export class UserService {
 
   constructor(
     private httpClient: HttpClient,
-    private snackBar  : MatSnackBar
+    private snackBar  : MatSnackBar,
+    private jwtService: JwtHelperService
   ) { }
 
   //? Metodos de Login y Registro
@@ -34,7 +39,7 @@ export class UserService {
   login(user: UserI): Observable<LoginResponseI> {
     return this.httpClient.post<LoginResponseI>('api/users/login', user).pipe(
       // guardamos el token en localstorage
-      tap((res: LoginResponseI) => localStorage.setItem('token', res.access_token)),
+      tap((res: LoginResponseI) => localStorage.setItem(LOCALSTORAGE_KEY_NESTJS_TODO_APP, res.access_token)),
     )
   }
 
@@ -58,6 +63,13 @@ export class UserService {
   failureSnackbar(error: string): void {
     this.snackBar.open(error, 'Close', snackBarConfig)
   }
+
+  // obtenemos el usuario logeado decodificando el token:
+  getLoggedUser() {
+    const decodedToken = this.jwtService.decodeToken();
+    return decodedToken.user
+  }
+
 
 
 }

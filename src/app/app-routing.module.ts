@@ -8,6 +8,11 @@ const routes: Routes = [
     path: 'public',
     loadChildren: () => import('./public/public.module').then(m =>  m.PublicModule)
   },
+  // ruta private nos llevara al dashboard, usaremos un private-routes.module para manejar rutas internas.
+  {
+    path: 'private',
+    loadChildren: () => import('./private/private.module').then(m =>  m.PrivateModule)
+  },
   // ademas redireccionaremos otros endpoint a la ruta public
   {
     path: '**',
