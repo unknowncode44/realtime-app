@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit                  } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { UserService } from '../../services/user-services/user.service';
-import { Router } from '@angular/router';
+import { Router                             } from '@angular/router';
+
+// Servicios Propios
+import { UserService    } from '../../services/user-services/user.service';
+import { SharedService  } from '../../../shared/services/shared.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +20,10 @@ export class LoginComponent {
     password: new FormControl(null, [Validators.required])
   })
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService   : UserService,
+    private sharedService : SharedService, 
+    private router        : Router) {}
 
 
 
@@ -28,7 +34,10 @@ export class LoginComponent {
         email   : this.email.value,
         password: this.password.value
       }).subscribe({
-        next: () => {},
+        next: () => {
+          this.userService.successLoginSnackBar()
+          this.sharedService.emitChangesOnUI()
+        },
         error: (err) => {
           this.loading = false
           this.userService.failureSnackbar(err.message)

@@ -1,0 +1,24 @@
+.item {
+    padding: 16px 8px;
+    border-left: solid 4px;
+}
+
+.item:hover {
+    border-left: solid 8px;
+}
+
+.complexityEasy, .complexityEasy:hover {
+    border-left-color: indigo;
+}
+
+.complexityMedium, .complexityMedium:hover {
+    border-left-color: blue;
+}
+
+.complexityHard, .complexityHard:hover {
+    border-left-color: red;
+}
+
+.done {
+    text-decoration: line-through;
+}

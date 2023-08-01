@@ -35,7 +35,7 @@ export class RegisterComponent {
         username  : this.username.value,
         password  : this.password.value,
       }).subscribe({
-        next: (user) => this.userService.successLoginSnackBar(),
+        next: (user) => this.userService.successRegisterSnackBar(user),
         error: (err) => {
           this.loading = false
           this.userService.failureSnackbar(err.message)
