@@ -14,7 +14,5 @@ export class TestService {
   constructor( private http: HttpClient) 
   { }
 
-  getUserById(id: number): Observable<any> {
-    return this.http.get<Test>(`/api/users/${id}`)
-  }
+  
 }

@@ -1,0 +1,45 @@
+<div class="signup">
+    <div *ngIf="loading" class="overlay">
+        <div class="spinner"></div>
+    </div>
+    <mat-card>
+        <mat-card-header style="color: #333; margin-bottom: 1rem;">
+            <mat-card-title style="min-width: 300px; text-align: center; font-size: 2.4em; font-family: 'Maven Pro', sans-serif">Registro</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="form" (ngSubmit)="register()">
+
+                <mat-form-field>
+                    <input type="email" matInput placeholder="Email" formControlName="email">
+                    <mat-error *ngIf="email.touched && email.hasError('required')">Email es necesario!</mat-error>
+                    <mat-error *ngIf="email.touched && email.hasError('email')">Email debe ser valido!</mat-error>
+                </mat-form-field>
+        
+                <mat-form-field>
+                    <input type="text" matInput placeholder="Nombre de Usuario" formControlName="username">
+                    <mat-error *ngIf="username.touched && username.hasError('required')">Usuario es necesario!</mat-error>
+                </mat-form-field>
+        
+                <mat-form-field>
+                    <input type="password" matInput placeholder="Contraseña" formControlName="password">
+                    <mat-error *ngIf="password.touched && email.hasError('required')">Contraseña es necesaria!</mat-error>
+                </mat-form-field>
+        
+                <mat-form-field>
+                    <input type="password" matInput placeholder="Repite Contraseña" formControlName="passwordConfirm">
+                </mat-form-field>
+        
+                <mat-hint *ngIf="!form.valid && form.touched">Por favor revisa todos los campos</mat-hint>
+        
+                <mat-error *ngIf="passwordConfirm.touched && form.hasError('passwordNotMatch')">Las contrasenas no coiciden!</mat-error>
+                
+                <div>
+                    <button class="btn" style="min-width: 290px; height: 48px; color: #fff; background: #3f51b5; font-family: 'Maven Pro', sans-serif; font-size: 1.2em" mat-button type="submit" [disabled]="!form.valid">Registrarse</button>
+                </div>
+            
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+

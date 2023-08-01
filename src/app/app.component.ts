@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Test, TestService } from './test.service';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -9,17 +9,31 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent {
   title = 'realtime-app';
-
   valueFromServer: string = ''
 
-  constructor(private testService: TestService) {
-    testService.getUserById(1).subscribe({
-      next: (data) => this.valueFromServer = data.title,
-      error: (err) =>  console.error(err),
-      complete: () => {}
-    })
+  constructor(private router: Router) {
+
     
   }
+
+  setActive(): void {
+    const formBx: HTMLElement | null = document.getElementById('formBx')
+    const body  : HTMLElement | null = document.querySelector('body')
+    formBx?.classList.add('active')
+    body?.classList.add('active')
+    this.router.navigate(['public/register'])
+  }
+
+  setInactive(): void {
+    this.router.navigate(['public/login'])
+    const formBx: HTMLElement | null = document.getElementById('formBx')
+    const body  : HTMLElement | null = document.querySelector('body')
+    formBx?.classList.remove('active')
+    body?.classList.remove('active')
+    
+    
+  }
+
   
  
 

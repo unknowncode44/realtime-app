@@ -1,1 +1,22 @@
-<h1>{{valueFromServer}}</h1>
+<div class="container">
+    <div class="blueBg">
+
+        <div class="box signin">
+            <h2>No tenes cuenta?</h2>
+            <button class="signinBtn" (click)="setActive()">Registrate</button>
+        </div>
+
+        <div class="box signup">
+            <h2>Ya tenes cuenta?</h2>
+            <button class="signinBtn" (click)="setInactive()">Ingresa</button>
+        </div>
+
+
+    </div>
+    <div class="formBx" id="formBx">
+        <router-outlet></router-outlet> 
+    </div>
+</div>
+
+
+
