@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from '../../services/todo.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TodoItem } from '../../private-interfaces';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog'
+import { CreateTodoComponent } from '../create-todo/create-todo.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +11,8 @@ import { TodoItem } from '../../private-interfaces';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+  createTodoComponentDialogRef: MatDialogRef<CreateTodoComponent> | undefined 
   
   inProgress: TodoItem[] = []
   done      : TodoItem[] = []
@@ -45,7 +49,10 @@ export class DashboardComponent implements OnInit {
     }
   ]
 
-  constructor(private todoService: TodoService) {}
+  constructor(
+    private todoService : TodoService,
+    private matDialog   : MatDialog
+    ) {}
 
 
   ngOnInit(): void {
@@ -71,6 +78,13 @@ export class DashboardComponent implements OnInit {
         event.currentIndex,
       );
     }
+  }
+
+  onShowCreateTodoDialog() {
+    this.createTodoComponentDialogRef = this.matDialog.open(CreateTodoComponent, {
+      maxHeight: '400px',
+      maxWidth: '300px',
+    })
   }
 
 }
