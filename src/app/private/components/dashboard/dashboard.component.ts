@@ -4,6 +4,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { TodoItem } from '../../private-interfaces';
 import { MatDialogRef, MatDialog } from '@angular/material/dialog'
 import { CreateTodoComponent } from '../create-todo/create-todo.component';
+import { todoItems } from '../../private-constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,46 +13,18 @@ import { CreateTodoComponent } from '../create-todo/create-todo.component';
 })
 export class DashboardComponent implements OnInit {
 
-  createTodoComponentDialogRef: MatDialogRef<CreateTodoComponent> | undefined 
-  
+  // creamos una referencia a nuestro dialogo para crear una nueva tarea
+  createTodoComponentDialogRef: MatDialogRef<CreateTodoComponent> | undefined
+
   inProgress: TodoItem[] = []
   done      : TodoItem[] = []
   todo      : TodoItem[] = []
 
-  items: TodoItem[] = [
-    {
-      title: 'Item Dificil',
-      complexity: 'DIFICIL',
-      subtitle: 'Item Dificil',
-      text: 'Tarea Dificil',
-      status: 'EN_PROGRESO'
-    },
-    {
-      title: 'Item Dificil',
-      complexity: 'DIFICIL',
-      subtitle: 'Item Dificil',
-      text: 'Tarea Dificil',
-      status: 'EN_PROGRESO'
-    },
-    {
-      title: 'Item Medio',
-      complexity: 'MEDIO',
-      subtitle: 'Item Medio',
-      text: 'Tarea Media',
-      status: 'PARA_HACER'
-    },
-    {
-      title: 'Item Facil',
-      complexity: 'FACIL',
-      subtitle: 'Item Facil',
-      text: 'Tarea Facil',
-      status: 'FINALIZADAS'
-    }
-  ]
+  items: TodoItem[] = todoItems
 
   constructor(
-    private todoService : TodoService,
-    private matDialog   : MatDialog
+    private todoService : TodoService,  //<-- nuestro servicio para obtener todos
+    private matDialog   : MatDialog     //<-- servicio dialog de Angular Material
     ) {}
 
 
@@ -80,10 +53,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // metodo para mostrar el dialog para agregar nuevas tareas
   onShowCreateTodoDialog() {
+    // instanciamos nuestra referencia para agregar tareas, y le pasamos el metodo open
+    // del servicio dialog, pasando como parametro nuestro todo component
     this.createTodoComponentDialogRef = this.matDialog.open(CreateTodoComponent, {
-      maxHeight: '400px',
-      maxWidth: '300px',
+      maxHeight: '600px',
+      maxWidth: '370px',
     })
   }
 

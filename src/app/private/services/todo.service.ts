@@ -7,8 +7,8 @@ import { TodoItem } from "../private-interfaces";
     providedIn: 'root'
 })
 export class TodoService {
-    // creamos una instancia del socket cliente usando metodo io() de la libreria socket-io.client 
-    socket = io('http://localhost:3044/todos', {
+    // creamos una instancia del socket cliente usando metodo io() de la libreria socket-io.client
+    socket = io('https://api.realtime.hvdevs.com', {
         auth: {
             // pasamos el token obtenido con nuestro metodo tokenGetter alojado en nuestro app.module.ts
             Authorization: tokenGetter()
