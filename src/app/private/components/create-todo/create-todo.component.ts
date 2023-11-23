@@ -1,8 +1,10 @@
 import { Component                          } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CreateTodoFormGroup                } from '../../private-interfaces';
+import { CreateTodoFormGroup, TodoItem                } from '../../private-interfaces';
 import { Complexity, Status                 } from '../../private-interfaces';
 import { complexityValues, statusValues     } from '../../private-constants';
+import { TodoService } from '../../services/todo.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
@@ -11,6 +13,8 @@ import { complexityValues, statusValues     } from '../../private-constants';
   styleUrls: ['./create-todo.component.scss']
 })
 export class CreateTodoComponent {
+
+
 
   // instanciamos las variables de complejidad y estado
   complexityValues: Complexity[] = complexityValues;
@@ -26,9 +30,28 @@ export class CreateTodoComponent {
 
   })
 
+  constructor(private todoService: TodoService, private dialogRef: MatDialogRef<CreateTodoComponent>) {}
+
   // metodo para crear nuevo todo
   onCreateTodo(){
-    console.log(this.form.value)
+    if(this.form.valid) {
+
+      // creamo un TodoItem con la informacion que recuperamos del formulario
+      const todo: TodoItem = {
+        title: this.title.value,
+        subtitle: this.subtitle.value,
+        text: this.text.value,
+        complexity: this.complexity.value,
+        status: this.status.value
+      }
+      // guardamos el todo usando el metodo de nuestro servicio
+      this.todoService.saveTodo(todo)
+      // cerramos el dialogo
+      this.dialogRef.close()
+    }
+    else {
+      console.log('Invalid')
+    }
   }
 
   // getters

@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { TodoService } from '../../services/todo.service';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { TodoItem } from '../../private-interfaces';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog'
-import { CreateTodoComponent } from '../create-todo/create-todo.component';
-import { todoItems } from '../../private-constants';
+import {  Component, OnInit         } from '@angular/core';
+import {  CdkDragDrop,
+          moveItemInArray,
+          transferArrayItem         } from '@angular/cdk/drag-drop';
+import {  MatDialogRef, MatDialog   } from '@angular/material/dialog'
+import { Observable, tap } from 'rxjs';
+
+// own imports
+import { TodoItem                   } from '../../private-interfaces';
+import {  TodoService               } from '../../services/todo.service';
+import { CreateTodoComponent        } from '../create-todo/create-todo.component';
+import { todoItems                  } from '../../private-constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +25,7 @@ export class DashboardComponent implements OnInit {
   done      : TodoItem[] = []
   todo      : TodoItem[] = []
 
-  items: TodoItem[] = todoItems
+  items$: Observable<TodoItem[]> = this.todoService.todoItems$
 
   constructor(
     private todoService : TodoService,  //<-- nuestro servicio para obtener todos
@@ -29,17 +34,24 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.todoService.sendMessage()
-      this.todoService.getTodos()
+      // ejecutamos los siguientes metodos al inicio para asegurar la suscripcion a los eventos socket
+      this.todoService.getTodos();
+      this.todoService.getAddedTodo();
+      this.todoService.getUpdatedTodos();
 
-      // TODO: TAREAS DESDE EL SERVIDOR
-      // tareas mock
-      this.inProgress = this.items.filter(item => item.status === 'EN_PROGRESO');
-      this.done       = this.items.filter(item => item.status === 'FINALIZADAS');
-      this.todo       = this.items.filter(item => item.status === 'PARA_HACER');
+      // obtenemos las tareas desde el servidor suscribiendonos a nuestro observable
+      // las filtramos por tipo
+      this.items$.pipe(
+        tap((items) => {
+          this.todo       = items.filter(item => item.status === 'PARA_HACER');
+          this.inProgress = items.filter(item => item.status === 'EN_PROGRESO');
+          this.done       = items.filter(item => item.status === 'FINALIZADAS');
+        })
+      ).subscribe()
   }
 
-
+  // funcion para manejar los eventos de drag & drop
+  // documentacion: https://material.angular.io/cdk/drag-drop/overview#cdk-drag-drop-connected-sorting
   drop(event: CdkDragDrop<TodoItem[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -51,6 +63,10 @@ export class DashboardComponent implements OnInit {
         event.currentIndex,
       );
     }
+
+    // actualizamos la tarea en la base de datos para que notifique otros listeners
+    const updatedItem: TodoItem = event.container.data[event.currentIndex];
+    this.todoService.updateTodo(updatedItem, event.container.id)
   }
 
   // metodo para mostrar el dialog para agregar nuevas tareas
@@ -58,7 +74,7 @@ export class DashboardComponent implements OnInit {
     // instanciamos nuestra referencia para agregar tareas, y le pasamos el metodo open
     // del servicio dialog, pasando como parametro nuestro todo component
     this.createTodoComponentDialogRef = this.matDialog.open(CreateTodoComponent, {
-      maxHeight: '600px',
+      maxHeight: '650px',
       maxWidth: '370px',
     })
   }

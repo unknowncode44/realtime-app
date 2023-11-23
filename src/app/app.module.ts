@@ -12,8 +12,6 @@ import { JwtModule } from '@auth0/angular-jwt'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PublicModule } from './public/public.module';
 
-// const socketConfig: SocketIoConfig = { url: 'http://127.0.0.1:3044', options: {}}
-
 // creamos una variable para llamar a nuestro token del localstorage
 // esto es necesario para obtnerlo automaticamente y que el servicio de la libreria angular-jwt
 // lo incorpore automaticamente y se pueda usar en JwtHelperService.
@@ -31,8 +29,8 @@ export function tokenGetter() {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    //SocketIoModule.forRoot(socketConfig), 
-    HttpClientModule, 
+    //SocketIoModule.forRoot(socketConfig),
+    HttpClientModule,
     BrowserAnimationsModule,
 
     //? JWT Module
